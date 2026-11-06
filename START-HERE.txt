@@ -1,0 +1,62 @@
+MP7001 REPEAT SETUP - UPC DIGITS FOLLOWED BY ONE ENTER
+
+This reproduces the working SNAPI + Zebra CoreScanner software keyboard
+emulation setup tested on MP7001-LNS0M10US, firmware PAADGC01-006-R00.
+The computer script targets 64-bit Windows with the default Zebra install path.
+Every destination Windows PC needs CoreScanner and the computer setup.
+The scanner settings alone do not provide keyboard output on an unprepared PC.
+
+ONCE FOR EACH WINDOWS PC
+1. Install the Zebra 123Scan package, including its CoreScanner component:
+   https://www.zebra.com/us/en/support-downloads/software/scanner-software/123scan-utility.html
+   The tested installation was 123Scan 6.01.0005 / CoreScanner 3.08.0022.
+2. Extract this entire ZIP to a local folder. Close 123Scan.
+3. Right-click Run-Computer-Setup.cmd and select Run as administrator.
+   Approve the Windows administrator prompt. Wait for Success: true.
+   The script enables CoreScanner keyboard emulation, appends one Enter
+   through driver formatting, and sets the CoreScanner service to Automatic.
+   It preserves other settings and records backups under Backups/COMPUTERNAME.
+
+FOR EACH MP7001 SCANNER
+1. Connect its POS USB port to a prepared PC and supply normal scanner power.
+   Configure one scanner at a time. Keep 123Scan closed.
+2. Print Scanner-Programming-Barcodes.pdf at Actual size / 100 percent.
+3. Scan PAGE 1: Symbol Native API (SNAPI) with Imaging Interface.
+   Wait for the startup/reconnection beeps and for Windows to reconnect it.
+4. Scan PAGE 2: Data As Is. This removes the scanner's CR/LF suffix.
+5. Click inside Notepad and scan several product UPCs. Each scan should
+   produce one complete number, followed by one Enter, with no extra letters.
+6. Reconnect or power-cycle the scanner and repeat the test before deployment.
+
+The supplied pages are unchanged programming pages from Zebra's MP7000
+Scanner Scale Barcode Programming Guide, MN-002912-12EN, April 2025:
+  PDF page 32 / printed page 2-9: SNAPI with Imaging Interface.
+  PDF page 342 / printed page 6-95: Data As Is, parameter 235 = 0.
+These are the barcode equivalents of the settings applied through the SDK
+on the tested scanner. The supplied barcode method still needs validation
+on your next unit; the original unit was configured through the SDK.
+
+WHAT THE WORKING SETTINGS ARE
+Scanner: permanent USB SNAPI with Imaging; parameter 235 = 0 (Data As Is).
+Computer: SIMULATED_HID_KB_SETTINGS/ENABLE = 1; FUNCTION_KEY_MAPPING = 1;
+          DDF/DDFMETA/SUFFIX2 = 13; DDF/DDFSELECT = 2 (DATA.SUFFIX2).
+The background CoreScanner service converts the barcode to keyboard input
+and supplies a single CR/Enter. 123Scan does not need to be open for normal use.
+No firmware flash or factory reset is part of this procedure.
+
+UNDO COMPUTER SETTINGS
+Right-click Undo-Computer-Setup.cmd and select Run as administrator to restore
+the saved emulation/formatting settings. Keep this folder and its Backups directory.
+The computer script does not alter scanner settings.
+
+IF A UNIT DOES NOT MATCH THE TESTED RESULT
+Record its full model, firmware, USB mode, and beep pattern. Different model
+or firmware variants need their own validation. Do not force a COMMON
+firmware package merely because the scanner family name looks similar.
+If it beeps normally but nothing types, check CoreScanner is Running and
+the destination PC received the computer setup. If there is a stray j,
+confirm Data As Is was scanned and the driver suffix is a single 13.
+
+OFFICIAL REFERENCES
+https://techdocs.zebra.com/dcs/scanners/sdk-windows/
+https://www.zebra.com/content/dam/support-dam/en/documentation/unrestricted/guide/product/mp7x00-prg-en.pdf

@@ -1,0 +1,13 @@
+# Generated computer-specific backups and setup results
+Backups/
+CoreScanner-Config-before.xml
+CoreScanner-Config-after.xml
+CoreScanner-service-before.json
+Computer-setup-result.json
+CoreScanner-persistence-result.json
+
+# Local diagnostics and temporary files
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
